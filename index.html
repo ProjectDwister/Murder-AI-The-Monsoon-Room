@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#090b10" />
+  <title>MURDER//AI — The Monsoon Room</title>
+  <style>
+    :root {
+      --bg:#080a0f; --panel:#10141d; --panel2:#151b26; --ink:#eef2f7; --muted:#8e9bad;
+      --accent:#d9ff67; --accent2:#8de8ff; --danger:#ff6b79; --warn:#ffc766; --line:#273040;
+      --shadow:0 24px 80px rgba(0,0,0,.38); --radius:18px;
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100vh;background:
+      radial-gradient(circle at 15% 0%,rgba(141,232,255,.08),transparent 30%),
+      radial-gradient(circle at 85% 20%,rgba(217,255,103,.06),transparent 28%),var(--bg);
+      color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,input,textarea,select{font:inherit} button{cursor:pointer}
+    .app{max-width:1500px;margin:auto;min-height:100vh;padding:18px}
+    .topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:16px;
+      margin:-18px -18px 18px;padding:14px 20px;background:rgba(8,10,15,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:.08em}.brand-mark{width:36px;height:36px;border:1px solid #445063;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,#121823,#090b10);box-shadow:inset 0 0 20px rgba(141,232,255,.06)}
+    .brand b{color:var(--accent)} .brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.18em;margin-top:2px}
+    .hud{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.pill{border:1px solid var(--line);background:#0d1118;color:var(--muted);padding:7px 10px;border-radius:999px;font-size:12px}.pill strong{color:var(--ink)}
+    .layout{display:grid;grid-template-columns:230px minmax(0,1fr) 310px;gap:18px;align-items:start}
+    .sidebar,.intel{position:sticky;top:82px}.card{background:linear-gradient(180deg,rgba(18,23,33,.96),rgba(12,16,23,.96));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .nav{padding:10px}.nav button{width:100%;border:0;background:transparent;color:var(--muted);padding:11px 12px;text-align:left;border-radius:12px;display:flex;gap:10px;align-items:center;margin:2px 0}.nav button:hover,.nav button.active{background:#171d28;color:var(--ink)} .nav button.active{box-shadow:inset 3px 0 0 var(--accent)}
+    .nav .icon{width:22px;text-align:center}.side-case{margin-top:12px;padding:16px}.kicker{font-size:10px;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;font-weight:800}.side-case h3{font-size:15px;margin:7px 0}.side-case p{font-size:12px;color:var(--muted);line-height:1.5;margin:0}.progress{height:6px;background:#080a0e;border-radius:99px;overflow:hidden;margin-top:12px}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%}
+    main{min-width:0}.view{display:none}.view.active{display:block}.hero{overflow:hidden;position:relative;padding:34px;min-height:290px;background:
+      linear-gradient(90deg,rgba(8,10,15,.3),rgba(8,10,15,.92)),
+      radial-gradient(circle at 20% 20%,rgba(141,232,255,.12),transparent 35%),
+      linear-gradient(135deg,#171d27,#090b10 64%)}
+    .hero:before{content:"";position:absolute;inset:0;opacity:.22;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to right,#000,transparent 72%)}
+    .hero-content{position:relative;max-width:760px}.eyebrow{color:var(--accent);font-weight:800;letter-spacing:.18em;text-transform:uppercase;font-size:11px}.hero h1{font-size:clamp(35px,6vw,68px);line-height:.92;letter-spacing:-.055em;margin:10px 0 14px}.hero h1 span{color:var(--accent2)}.hero p{color:#b6c0cf;line-height:1.62;max-width:680px}.hero-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.tag{font-size:11px;color:#aeb9c8;border:1px solid #30394a;padding:6px 8px;border-radius:8px;background:#0f141c}
+    .section{margin-top:18px;padding:20px}.section-title{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:16px}.section h2{font-size:19px;margin:0}.section-sub{color:var(--muted);font-size:12px;margin-top:4px}.btn{border:1px solid #364153;background:#161d28;color:var(--ink);padding:10px 13px;border-radius:11px;font-weight:750;font-size:12px}.btn:hover{border-color:#506078;background:#1a2230}.btn.primary{background:var(--accent);border-color:var(--accent);color:#0c1008}.btn.danger{background:#30141a;border-color:#5c2732;color:#ffabb5}.btn.ghost{background:transparent}.btn:disabled{opacity:.42;cursor:not-allowed}
+    .scene-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.hotspot{padding:16px;border:1px solid #283245;background:#0d121a;border-radius:14px;min-height:150px;position:relative}.hotspot .n{position:absolute;right:14px;top:12px;color:#465267;font-size:11px}.hotspot h3{margin:28px 0 6px;font-size:15px}.hotspot p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}.hotspot button{margin-top:12px}.hotspot.inspected{border-color:#3f5960}.hotspot.inspected:after{content:"INSPECTED";position:absolute;top:13px;left:14px;color:var(--accent2);font-size:9px;font-weight:900;letter-spacing:.15em}
+    .suspect-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.suspect-card{padding:16px;position:relative;overflow:hidden}.suspect-card:before{content:"";position:absolute;width:100px;height:100px;border-radius:50%;right:-30px;top:-35px;background:radial-gradient(circle,rgba(141,232,255,.14),transparent 68%)}.suspect-top{display:flex;gap:12px;align-items:center}.avatar{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-weight:900;font-size:17px;background:#1a2230;border:1px solid #334056}.suspect-card h3{font-size:15px;margin:0}.suspect-card .role{font-size:11px;color:var(--muted);margin-top:2px}.meter-row{display:grid;grid-template-columns:70px 1fr 34px;align-items:center;gap:8px;margin-top:14px;color:var(--muted);font-size:10px}.meter{height:5px;background:#090c11;border-radius:99px;overflow:hidden}.meter span{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--warn));width:12%}.suspect-note{font-size:12px;line-height:1.45;color:#aab5c4;margin:12px 0}.suspect-actions{display:flex;gap:8px}
+    .interrogate{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:640px;overflow:hidden}.suspect-list{border-right:1px solid var(--line);padding:10px;background:#0c1017}.suspect-list button{width:100%;text-align:left;border:0;background:transparent;color:var(--muted);padding:11px;border-radius:10px;margin:2px 0}.suspect-list button.active,.suspect-list button:hover{background:#171e29;color:var(--ink)}.chat{display:flex;flex-direction:column;min-width:0}.chat-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.chat-head strong{font-size:14px}.chat-head span{font-size:11px;color:var(--muted)}.messages{padding:20px;display:flex;flex-direction:column;gap:12px;overflow:auto;min-height:420px;max-height:520px}.message{max-width:82%;padding:12px 14px;border-radius:14px;line-height:1.48;font-size:13px}.message.user{align-self:flex-end;background:#d9ff67;color:#11160b;border-bottom-right-radius:4px}.message.suspect{align-self:flex-start;background:#171e2a;border:1px solid #293447;border-bottom-left-radius:4px}.message.system{align-self:center;background:transparent;color:var(--muted);font-size:11px;text-align:center}.chat-chips{padding:0 16px 10px;display:flex;gap:7px;overflow:auto}.chip{white-space:nowrap;border:1px solid #303b4d;background:#101620;color:#b9c4d2;padding:7px 9px;border-radius:999px;font-size:10px}.composer{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:#0d1219}.composer input{flex:1;min-width:0;border:1px solid #303a4c;background:#080b10;color:var(--ink);border-radius:11px;padding:11px 12px;outline:none}.composer input:focus{border-color:#5c748b}
+    .evidence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.evidence{padding:15px;display:flex;gap:12px}.evidence.locked{filter:saturate(.2);opacity:.44}.evidence-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid #334056;border-radius:13px;background:#0b0f16}.evidence h3{margin:1px 0 4px;font-size:13px}.evidence p{margin:0;color:var(--muted);font-size:11px;line-height:1.5}.evidence .type{display:inline-block;margin-top:7px;color:var(--accent2);font-size:9px;text-transform:uppercase;letter-spacing:.13em}
+    .notes{width:100%;min-height:440px;resize:vertical;border:1px solid #2d3748;border-radius:14px;background:#080b10;color:#dfe7f0;padding:16px;line-height:1.55;outline:none}.notes:focus{border-color:#52677e}.note-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .accuse-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.form-box{padding:18px}.field{margin-bottom:14px}.field label{display:block;color:var(--muted);font-size:11px;margin-bottom:7px}.field select{width:100%;background:#0b0f16;color:var(--ink);border:1px solid #303a4b;border-radius:11px;padding:11px}.checklist{display:grid;gap:8px;max-height:300px;overflow:auto}.check{display:flex;gap:9px;align-items:flex-start;border:1px solid #293345;padding:10px;border-radius:11px;background:#0c1118;font-size:11px;color:#bac5d4}.check input{accent-color:#d9ff67;margin-top:2px}.verdict{padding:20px;background:radial-gradient(circle at 100% 0%,rgba(255,107,121,.08),transparent 35%),#0d1118}.verdict h3{font-size:24px;margin:7px 0}.verdict p{color:var(--muted);line-height:1.55;font-size:12px}.verdict .big{font-size:42px;font-weight:900;color:var(--accent)}
+    .intel{display:grid;gap:12px}.intel-card{padding:15px}.intel-card h3{font-size:12px;margin:0 0 10px;letter-spacing:.04em}.ai-orb{width:52px;height:52px;border-radius:50%;margin:6px auto 12px;background:radial-gradient(circle at 35% 28%,#e8ffff 0 6%,#8de8ff 12%,#31556f 35%,#10151e 66%);box-shadow:0 0 36px rgba(141,232,255,.15)}.ai-copy{text-align:center;font-size:11px;line-height:1.5;color:var(--muted)}.hint-box{margin-top:10px;border:1px dashed #334357;border-radius:12px;padding:10px;font-size:11px;line-height:1.45;color:#c5d0de;min-height:74px}.mini-list{display:grid;gap:7px}.mini{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:var(--muted);padding-bottom:7px;border-bottom:1px solid #202836}.mini:last-child{border-bottom:0}.mini strong{color:#dfe7ef;font-weight:700}
+    .modal{position:fixed;inset:0;background:rgba(2,4,7,.78);backdrop-filter:blur(12px);z-index:100;display:grid;place-items:center;padding:20px}.modal.hidden{display:none}.modal-card{max-width:760px;width:100%;padding:28px}.modal h2{font-size:36px;letter-spacing:-.04em;margin:5px 0 10px}.modal p{color:var(--muted);line-height:1.6}.difficulty{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:20px 0}.diff{border:1px solid #303a4b;background:#0c1118;padding:14px;border-radius:13px;color:var(--ink);text-align:left}.diff.active{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.diff strong{display:block;font-size:12px}.diff span{display:block;color:var(--muted);font-size:10px;margin-top:3px;line-height:1.4}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.solution{margin-top:14px;padding:14px;border:1px solid #343d4b;border-radius:12px;background:#0a0e14;color:#c8d2de;font-size:12px;line-height:1.55}
+    .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#eaf1f6;color:#101318;padding:10px 14px;border-radius:11px;font-size:11px;font-weight:800;opacity:0;pointer-events:none;transition:.2s;z-index:120}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:1120px){.layout{grid-template-columns:190px minmax(0,1fr)}.intel{position:static;grid-column:1/-1;grid-template-columns:repeat(3,1fr)}.sidebar{top:82px}}
+    @media(max-width:780px){.app{padding:10px}.topbar{margin:-10px -10px 12px;padding:10px 12px}.brand small{display:none}.hud .pill:nth-child(1),.hud .pill:nth-child(2){display:none}.layout{display:block}.sidebar{position:static;margin-bottom:12px}.nav{display:flex;overflow:auto;gap:4px}.nav button{width:auto;white-space:nowrap}.nav button span:last-child{display:none}.side-case{display:none}.hero{padding:24px;min-height:240px}.hero h1{font-size:45px}.scene-grid,.suspect-grid,.evidence-grid,.accuse-grid{grid-template-columns:1fr}.interrogate{grid-template-columns:1fr}.suspect-list{display:flex;overflow:auto;border-right:0;border-bottom:1px solid var(--line)}.suspect-list button{min-width:135px}.messages{min-height:400px}.intel{grid-template-columns:1fr}.difficulty{grid-template-columns:1fr}.modal-card{padding:20px}.modal h2{font-size:30px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">⌁</div><div>MURDER<b>//AI</b><small>INTERACTIVE CASE ENGINE</small></div></div>
+    <div class="hud">
+      <div class="pill">Case <strong id="seedLabel">—</strong></div>
+      <div class="pill">Difficulty <strong id="difficultyLabel">Detective</strong></div>
+      <div class="pill">Questions <strong id="questionCount">0</strong></div>
+      <div class="pill">Score <strong id="scoreLabel">1000</strong></div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="card nav" id="nav">
+        <button class="active" data-view="scene"><span class="icon">⌂</span><span>Crime Scene</span></button>
+        <button data-view="suspects"><span class="icon">◎</span><span>Suspects</span></button>
+        <button data-view="interrogate"><span class="icon">◌</span><span>Interrogate</span></button>
+        <button data-view="evidence"><span class="icon">◇</span><span>Evidence</span></button>
+        <button data-view="notebook"><span class="icon">≡</span><span>Notebook</span></button>
+        <button data-view="accuse"><span class="icon">⚑</span><span>Accuse</span></button>
+      </div>
+      <div class="card side-case">
+        <div class="kicker">Case status</div>
+        <h3>The Monsoon Room</h3>
+        <p id="caseStatus">Scene secured. No arrest made. Build a case before you accuse.</p>
+        <div class="progress"><span id="caseProgress"></span></div>
+      </div>
+    </aside>
+
+    <main>
+      <section id="view-scene" class="view active">
+        <div class="card hero">
+          <div class="hero-content">
+            <div class="eyebrow">Mumbai • 22:31 • Monsoon warning in effect</div>
+            <h1>THE <span>MONSOON</span><br>ROOM</h1>
+            <p>Financier <strong>Arjun Mehra</strong> is dead inside the locked study of the fictional Sea Crest House. Five people had reasons to want him silenced. One of them is lying about where they were at 22:17.</p>
+            <div class="hero-meta"><span class="tag">Victim: Arjun Mehra, 48</span><span class="tag">Cause: blunt-force trauma</span><span class="tag">Window: 22:12–22:19</span><span class="tag">Suspects: 5</span></div>
+          </div>
+        </div>
+        <div class="card section">
+          <div class="section-title"><div><h2>Inspect the study</h2><div class="section-sub">Every object matters. Some clues only become useful after an interrogation.</div></div></div>
+          <div class="scene-grid" id="sceneGrid"></div>
+        </div>
+      </section>
+
+      <section id="view-suspects" class="view">
+        <div class="card section">
+          <div class="section-title"><div><div class="kicker">Persons of interest</div><h2>Five stories. One engineered alibi.</h2></div></div>
+          <div class="suspect-grid" id="suspectGrid"></div>
+        </div>
+      </section>
+
+      <section id="view-interrogate" class="view">
+        <div class="card interrogate">
+          <div class="suspect-list" id="suspectList"></div>
+          <div class="chat">
+            <div class="chat-head"><div><strong id="chatName">—</strong><br><span id="chatRole">Select a suspect</span></div><div class="pill">Stress <strong id="chatStress">0%</strong></div></div>
+            <div class="messages" id="messages"></div>
+            <div class="chat-chips">
+              <button class="chip" data-q="Where were you between 10:10 and 10:20?">Ask alibi</button>
+              <button class="chip" data-q="What was your relationship with Arjun?">Relationship</button>
+              <button class="chip" data-q="Did you have a motive to hurt him?">Motive</button>
+              <button class="chip" data-q="What do you know about the missing astrolabe?">Weapon</button>
+              <button class="chip" data-q="What are you hiding from me?">Push harder</button>
+            </div>
+            <form class="composer" id="chatForm"><input id="questionInput" autocomplete="off" placeholder="Ask anything: 'Why did your badge open the stairwell at 22:12?'"/><button class="btn primary">Ask</button></form>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-evidence" class="view">
+        <div class="card section">
+          <div class="section-title"><div><div class="kicker">Evidence locker</div><h2>What you can prove</h2><div class="section-sub">Locked cards are discoverable. Ask better questions or inspect the scene.</div></div><button class="btn ghost" id="sortEvidence">Show unlocked only</button></div>
+          <div class="evidence-grid" id="evidenceGrid"></div>
+        </div>
+      </section>
+
+      <section id="view-notebook" class="view">
+        <div class="card section">
+          <div class="section-title"><div><div class="kicker">Detective notebook</div><h2>Your theory</h2><div class="section-sub">Important statements are added automatically; edit this any way you like.</div></div></div>
+          <textarea class="notes" id="notes" placeholder="Build your theory here..."></textarea>
+          <div class="note-tools"><button class="btn" id="addTimeline">Add current timeline</button><button class="btn" id="copyNotes">Copy notes</button><button class="btn danger" id="clearNotes">Clear</button></div>
+        </div>
+      </section>
+
+      <section id="view-accuse" class="view">
+        <div class="card section">
+          <div class="section-title"><div><div class="kicker">Final accusation</div><h2>Make it hold up in court</h2><div class="section-sub">Name the killer and submit at least two pieces of evidence.</div></div></div>
+          <div class="accuse-grid">
+            <div class="card form-box">
+              <div class="field"><label>Who killed Arjun Mehra?</label><select id="accuseSuspect"></select></div>
+              <div class="field"><label>Primary motive</label><select id="accuseMotive"><option>Money / financial exposure</option><option>Revenge / family conflict</option><option>Career or reputation</option><option>Control / corporate power</option><option>Covering another crime</option></select></div>
+              <div class="field"><label>Evidence you are relying on</label><div class="checklist" id="accuseEvidence"></div></div>
+              <button class="btn primary" id="submitAccusation">Submit accusation</button>
+            </div>
+            <div class="card verdict" id="verdictBox">
+              <div class="kicker">Case analyst</div><h3>Not enough to charge.</h3><p>Interrogate suspects, inspect the study, connect physical evidence to a timeline, then come back here.</p>
+              <div class="big" id="verdictScore">—</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="intel">
+      <div class="card intel-card">
+        <div class="ai-orb"></div><h3 style="text-align:center">CASE ANALYST // ORACLE</h3>
+        <div class="ai-copy">I can compare statements, timelines and evidence. Every hint costs points.</div>
+        <div class="hint-box" id="hintBox">No analysis requested.</div>
+        <button class="btn" id="hintBtn" style="width:100%;margin-top:9px">Analyze contradictions −120</button>
+      </div>
+      <div class="card intel-card"><h3>INVESTIGATION</h3><div class="mini-list"><div class="mini"><span>Evidence found</span><strong id="foundCount">0 / 0</strong></div><div class="mini"><span>Suspects questioned</span><strong id="questionedCount">0 / 5</strong></div><div class="mini"><span>Hints used</span><strong id="hintsCount">0</strong></div><div class="mini"><span>Accusations left</span><strong id="accusationsLeft">2</strong></div></div></div>
+      <div class="card intel-card"><h3>PROTOCOL</h3><div class="ai-copy" style="text-align:left">The murderer changes between cases. Evidence is generated to remain consistent with the culprit, so replaying the same scene does not mean replaying the same solution.</div></div>
+    </aside>
+  </div>
+</div>
+
+<div class="modal" id="startModal">
+  <div class="card modal-card">
+    <div class="kicker">Interactive murder mystery</div><h2>MURDER//AI</h2>
+    <p>A procedural detective game built around free-text interrogation. The killer is selected when the case opens, and the evidence graph changes with them. No login. No API key. No internet required after load.</p>
+    <div class="difficulty" id="difficultyChoices">
+      <button class="diff" data-diff="rookie"><strong>Rookie</strong><span>3 accusations. Stronger hints. Evidence unlocks faster.</span></button>
+      <button class="diff active" data-diff="detective"><strong>Detective</strong><span>2 accusations. Balanced clue discovery.</span></button>
+      <button class="diff" data-diff="mastermind"><strong>Mastermind</strong><span>1 accusation. Sparse hints. Culprit stays composed longer.</span></button>
+    </div>
+    <div class="modal-actions"><button class="btn primary" id="startGame">Open case file</button></div>
+  </div>
+</div>
+
+<div class="modal hidden" id="endModal">
+  <div class="card modal-card"><div class="kicker" id="endKicker">Case closed</div><h2 id="endTitle">You got them.</h2><p id="endText"></p><div class="solution" id="solutionText"></div><div class="modal-actions"><button class="btn" id="closeEnd">Review case</button><button class="btn primary" id="newCase">Generate new case</button></div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const suspects = {
+    mira: {name:'Mira Kapoor', initials:'MK', role:'Chief Financial Officer', demeanor:'precise, controlled', relation:'Arjun’s CFO for six years. Their partnership had deteriorated after he ordered a surprise audit.', motive:'A forensic audit scheduled for the next morning could have exposed transactions routed through a shell vendor.', alibi:'She says she stayed in the ballroom from 22:05 until the body was found.', innocentSecret:'She did leave the ballroom briefly — to meet the external auditor privately and hand over documents implicating Arjun in tax fraud.', baseStress:10},
+    kabir:{name:'Kabir Mehra', initials:'KM', role:'Victim’s younger brother', demeanor:'angry, impulsive', relation:'Estranged brother. They had spent two years fighting over control of a family trust.', motive:'Arjun amended the family trust and cut Kabir’s influence over a valuable property holding.', alibi:'He says he was smoking alone on the west terrace from 22:08 to 22:24.', innocentSecret:'He had hidden gambling debts and argued with Arjun at 21:40, but left the study alive.', baseStress:20},
+    leena:{name:'Leena D’Souza', initials:'LD', role:'Investigative journalist', demeanor:'observant, guarded', relation:'She was preparing a profile of Arjun that had turned adversarial after he threatened legal action.', motive:'Arjun claimed he could prove one of her confidential sources fabricated documents, threatening her career.', alibi:'She says her audio recorder ran continuously while she interviewed guests near the piano.', innocentSecret:'Her recorder contains a deliberate edit because she protected the identity of a whistleblower she met in the service corridor.', baseStress:14},
+    dev:{name:'Dev Sethi', initials:'DS', role:'Head of private security', demeanor:'measured, tactical', relation:'He ran security at Sea Crest House. Arjun had recently accused his team of leaking guest information.', motive:'Arjun planned to terminate Dev’s contract and pursue damages after a confidential guest list leaked.', alibi:'He says he was in the security room handling a weather-related camera fault.', innocentSecret:'He had previously sold harmless celebrity-arrival timings to a gossip photographer. He is hiding misconduct, not murder.', baseStress:8},
+    aanya:{name:'Aanya Rao', initials:'AR', role:'Co-founder & board director', demeanor:'calm, analytical', relation:'She co-founded Arjun’s investment firm but had lost voting control after a bitter financing round.', motive:'A board vote the next morning could permanently remove her from the company she helped build.', alibi:'She says she was on a video call from the covered terrace from 22:09 to 22:23.', innocentSecret:'She was quietly organizing a shareholder bloc to remove Arjun as CEO. The “video call” was partly a strategy call she did not want disclosed.', baseStress:7}
+  };
+
+  const culpritProfiles = {
+    mira:{motiveLabel:'Money / financial exposure', lie:'The ballroom. I did not leave it after ten-oh-five.', truth:'She slipped out at 22:10, used the south stair, confronted Arjun about the audit, struck him with the astrolabe, wiped it, and returned before the toast.', slip:'You keep calling it a stairwell log. That reader drifts by nearly a minute—', confession:'The audit would have destroyed me. I went in to make him stop it. He laughed. I picked up the astrolabe. I only meant to frighten him.', clues:[
+      ['mira-access','South stair access log','Digital','Mira’s badge opened the south stair door at 22:12:41. Her stated alibi places her continuously in the ballroom.','▥'],
+      ['mira-ledger','The 09:00 audit memo','Document','Arjun scheduled an external forensic audit for 09:00. A flagged shell vendor is linked to approvals from Mira’s office.','▤'],
+      ['mira-fiber','Blue wool fibre','Forensic','A midnight-blue wool fibre was recovered from the astrolabe’s hinge. Mira is wearing a wool blazer with a fresh snag at the cuff.','⌁']
+    ], hint:'Start with the person whose alibi says “never left” and compare it with building access at 22:12.'},
+    kabir:{motiveLabel:'Revenge / family conflict', lie:'West terrace. Alone. I did not go back inside until everyone started shouting.', truth:'He entered by the service door at 22:13 after learning Arjun changed the trust, fought with him, killed him, then used the garden path to return to the terrace.', slip:'That bronze thing was heavier than it looked— I mean, the one in the photographs.', confession:'He was cutting me out of everything and enjoying it. I went in furious. We fought. I hit him once, then again.', clues:[
+      ['kabir-frame','Service-lift camera frame','Digital','A surviving frame at 22:13:18 shows a hand with the Mehra family signet ring entering the study corridor. Kabir wears that ring tonight.','◫'],
+      ['kabir-trust','Revised family trust','Document','The document signed three days ago removes Kabir from a property-management role worth several crore in annual fees.','▤'],
+      ['kabir-residue','Bronze polish on cuff','Forensic','Bronze polish matching the astrolabe’s cleaning compound is embedded in the right cuff of Kabir’s jacket.','⌁']
+    ], hint:'A witness does not need a face. Jewelry, cuffs and habitual objects can anchor a timeline.'},
+    leena:{motiveLabel:'Career or reputation', lie:'My recorder was running by the piano the entire time. Audio is better than a witness.', truth:'She cut seven minutes from the recording, confronted Arjun at 22:14, killed him after he threatened to discredit her source, then rejoined the reception.', slip:'There is no seven-minute gap. It is six— ...what exactly did forensics tell you?', confession:'He was going to burn a source who trusted me and take my career with it. I confronted him. I lost control.', clues:[
+      ['leena-meta','Edited audio metadata','Digital','Leena’s “continuous” interview file was re-encoded at 22:26. The original timeline contains a 7-minute deletion beginning at 22:11.','◉'],
+      ['leena-threat','Threatening message','Document','At 21:58 Arjun texted Leena: “Publish it and I will expose your source as a fraud before breakfast.”','▤'],
+      ['leena-dust','Bronze dust in camera bag','Forensic','Microscopic bronze dust and a trace of marble powder from the study floor were found inside the base seam of Leena’s camera bag.','⌁']
+    ], hint:'One suspect is using a recording as an alibi. Treat the file itself as a witness and test whether it was altered.'},
+    dev:{motiveLabel:'Covering another crime', lie:'The cameras failed in the rain. I was in the control room trying to bring them back.', truth:'He manually disabled the corridor cameras with his admin token, entered the study using his master credential, killed Arjun before Arjun could expose his earlier data leak, then restored the feed.', slip:'The outage was weather-related. Nobody manually killed camera group C—', confession:'He was going to ruin me and then hand the evidence to the police. I disabled the feed to scare him into backing off. It went wrong.', clues:[
+      ['dev-token','Camera override token','Digital','Camera group C was disabled manually at 22:09:52 using Dev’s unique administrator token; it was restored at 22:21:03.','▥'],
+      ['dev-contract','Termination draft','Document','A draft letter on Arjun’s laptop terminates Dev’s firm and refers a prior guest-data leak for criminal review.','▤'],
+      ['dev-grit','Service-tunnel grit','Forensic','Distinctive red waterproofing grit from the restricted service tunnel is trapped in Dev’s trouser hem. It also appears just inside the study’s service door.','⌁']
+    ], hint:'A malfunction and a manual override can look identical on a screen. Find out who had the credential to create the “fault.”'},
+    aanya:{motiveLabel:'Control / corporate power', lie:'I was on the terrace call from nine past ten until twenty-three past. The other directors can confirm it.', truth:'She left her phone on the call, muted it, crossed the east gallery, confronted Arjun, killed him, and returned before anyone asked her a direct question.', slip:'A phone being on the terrace does not prove the person holding it— ...that is not what I meant.', confession:'He had engineered the vote so I would lose the company I built. I left the phone on the call and went to confront him. Then everything collapsed.', clues:[
+      ['aanya-beacon','Gallery proximity beacon','Digital','Aanya’s smart access ring pinged the east-gallery beacon at 22:15:09. Her phone remained connected to the terrace call.','◌'],
+      ['aanya-vote','Board vote pack','Document','The sealed board pack shows Arjun had secured enough proxies to remove Aanya from the board at 09:30 the next morning.','▤'],
+      ['aanya-charm','Broken bracelet charm','Forensic','A small silver circuit-shaped charm recovered beneath the study desk matches a missing piece from Aanya’s bracelet.','⌁']
+    ], hint:'Separate a device alibi from a human alibi. A phone can stay on a call after its owner walks away.'}
+  };
+
+  const baseEvidence = [
+    {id:'tod',name:'Time of death',type:'Forensic',text:'Arjun’s smartwatch registered a sudden fall and loss of pulse at approximately 22:17. Medical estimate: 22:16–22:19.',icon:'◷',initial:true},
+    {id:'weapon',name:'Missing brass astrolabe',type:'Scene',text:'A dust outline on the study shelf matches a 2.4 kg brass astrolabe. Blood was found in the shelf hinge; the object itself is missing.',icon:'⌖',initial:false,scene:'shelf'},
+    {id:'doors',name:'Locked-room detail',type:'Scene',text:'The main study door auto-locked at 22:20. A second service door exists behind the bookcase and logs credential use imperfectly.',icon:'▣',initial:false,scene:'bookcase'},
+    {id:'whisky',name:'Untouched whisky',type:'Scene',text:'The victim’s whisky glass shows no sign of poison and has not been moved since roughly 22:08, weakening the poisoning theory.',icon:'◒',initial:false,scene:'desk'},
+    {id:'rain',name:'Rain pattern at window',type:'Scene',text:'The window was opened after the rain intensified at 22:20. It likely staged an escape route rather than being used by the killer.',icon:'⌁',initial:false,scene:'window'}
+  ];
+
+  const scenes = [
+    {id:'desk',n:'01',title:'Desk & whisky',text:'A cut-crystal glass, a stopped smartwatch and a half-finished board memo. No obvious poison smell or residue.'},
+    {id:'shelf',n:'02',title:'Display shelf',text:'One dust-free outline interrupts a row of antique instruments. The missing object is heavy enough to be a weapon.'},
+    {id:'bookcase',n:'03',title:'Bookcase wall',text:'The books are too shallow for the wall. A concealed service door sits behind a sliding panel.'},
+    {id:'window',n:'04',title:'Open sea-facing window',text:'Rainwater crosses the sill, but the wet pattern does not continue naturally into the room.'}
+  ];
+
+  const state = {difficulty:'detective', culprit:null, seed:null, score:1000, questions:0, hints:0, accusations:2, unlocked:new Set(['tod']), inspected:new Set(), questioned:new Set(), stress:{}, chats:{}, notes:'', evidenceOnly:false, ended:false};
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  const allEvidence = () => [...baseEvidence, ...culpritProfiles[state.culprit].clues.map(c=>({id:c[0],name:c[1],type:c[2],text:c[3],icon:c[4],culprit:true}))];
+  const diffCfg = {rookie:{accusations:3,stressGain:18,scorePenalty:3},detective:{accusations:2,stressGain:13,scorePenalty:5},mastermind:{accusations:1,stressGain:9,scorePenalty:7}};
+
+  function seededPick(){ const keys=Object.keys(suspects); let x=0; for(const c of state.seed) x=(x*31+c.charCodeAt(0))>>>0; return keys[x%keys.length]; }
+  function makeSeed(){return Math.random().toString(36).slice(2,6).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase()}
+  function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1700)}
+  function setView(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`)); $$('#nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===v)); if(v==='evidence')renderEvidence(); if(v==='accuse')renderAccuse();}
+  function initialsName(k){return suspects[k].name.split(' ')[0]}
+
+  function start(){
+    state.seed=makeSeed(); state.culprit=seededPick(); state.score=1000; state.questions=0; state.hints=0; state.accusations=diffCfg[state.difficulty].accusations; state.unlocked=new Set(['tod']); state.inspected=new Set(); state.questioned=new Set(); state.ended=false; state.notes='CASE: THE MONSOON ROOM\nTime of death: approx. 22:17\n\n';
+    Object.keys(suspects).forEach(k=>{state.stress[k]=suspects[k].baseStress;state.chats[k]=[{from:'suspect',text:`${suspects[k].name}: “Ask what you need to ask.”`}];});
+    $('#notes').value=state.notes; $('#startModal').classList.add('hidden'); $('#difficultyLabel').textContent=state.difficulty[0].toUpperCase()+state.difficulty.slice(1); $('#seedLabel').textContent=state.seed; renderAll(); selectSuspect('mira'); setView('scene');
+  }
+
+  function renderAll(){renderScene();renderSuspects();renderSuspectList();renderEvidence();renderAccuse();updateHud();}
+  function updateHud(){
+    $('#questionCount').textContent=state.questions; $('#scoreLabel').textContent=Math.max(0,state.score); $('#foundCount').textContent=`${state.unlocked.size} / ${allEvidence().length}`; $('#questionedCount').textContent=`${state.questioned.size} / 5`; $('#hintsCount').textContent=state.hints; $('#accusationsLeft').textContent=state.accusations;
+    const progress=Math.min(100,Math.round((state.unlocked.size/allEvidence().length)*65+(state.questioned.size/5)*35)); $('#caseProgress').style.width=progress+'%';
+    $('#caseStatus').textContent=progress<35?'Scene secured. Start building a timeline.':progress<70?'Several alibis now conflict with the evidence.':'You have enough material to test a theory.';
+  }
+
+  function renderScene(){
+    $('#sceneGrid').innerHTML=scenes.map(s=>`<div class="hotspot ${state.inspected.has(s.id)?'inspected':''}"><span class="n">${s.n}</span><h3>${s.title}</h3><p>${s.text}</p><button class="btn" data-inspect="${s.id}" ${state.inspected.has(s.id)?'disabled':''}>${state.inspected.has(s.id)?'Logged':'Inspect closely'}</button></div>`).join('');
+    $$('[data-inspect]').forEach(b=>b.onclick=()=>inspect(b.dataset.inspect));
+  }
+  function inspect(id){state.inspected.add(id); const ev=baseEvidence.find(e=>e.scene===id); if(ev){state.unlocked.add(ev.id); addNote(`SCENE — ${ev.name}: ${ev.text}`);toast(`Evidence added: ${ev.name}`)} state.score=Math.max(0,state.score-2);renderAll();}
+
+  function renderSuspects(){
+    $('#suspectGrid').innerHTML=Object.entries(suspects).map(([k,s])=>`<div class="card suspect-card"><div class="suspect-top"><div class="avatar">${s.initials}</div><div><h3>${s.name}</h3><div class="role">${s.role}</div></div></div><div class="suspect-note">${s.relation}</div><div class="meter-row"><span>Stress</span><div class="meter"><span style="width:${state.stress[k]}%"></span></div><strong>${state.stress[k]}%</strong></div><div class="suspect-actions"><button class="btn" data-file="${k}">Review file</button><button class="btn primary" data-talk="${k}">Interrogate</button></div></div>`).join('');
+    $$('[data-talk]').forEach(b=>b.onclick=()=>{selectSuspect(b.dataset.talk);setView('interrogate')}); $$('[data-file]').forEach(b=>b.onclick=()=>{const k=b.dataset.file,s=suspects[k];addNote(`FILE — ${s.name}\nRelationship: ${s.relation}\nKnown pressure: ${s.motive}`);toast('Suspect file added to notebook')});
+  }
+  function renderSuspectList(){
+    $('#suspectList').innerHTML=Object.entries(suspects).map(([k,s])=>`<button data-sel="${k}"><strong>${s.name}</strong><br><span style="font-size:10px">${s.role}</span></button>`).join(''); $$('[data-sel]').forEach(b=>b.onclick=()=>selectSuspect(b.dataset.sel));
+  }
+  let activeSuspect='mira';
+  function selectSuspect(k){activeSuspect=k;$$('[data-sel]').forEach(b=>b.classList.toggle('active',b.dataset.sel===k));$('#chatName').textContent=suspects[k].name;$('#chatRole').textContent=`${suspects[k].role} • ${suspects[k].demeanor}`;renderChat();}
+  function renderChat(){const msgs=state.chats[activeSuspect]||[];$('#messages').innerHTML=msgs.map(m=>`<div class="message ${m.from}">${escapeHtml(m.text)}</div>`).join('');$('#messages').scrollTop=$('#messages').scrollHeight;$('#chatStress').textContent=state.stress[activeSuspect]+'%';}
+  function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+
+  function intent(q){q=q.toLowerCase();if(/where|alibi|between|time|10:|22:|when/.test(q))return'alibi';if(/motive|why|reason|gain|money|audit|trust|board|contract|career/.test(q))return'motive';if(/relationship|know arjun|victim|him/.test(q))return'relation';if(/astrolabe|weapon|bronze|hit|blunt/.test(q))return'weapon';if(/lie|lying|hide|hiding|secret|truth/.test(q))return'pressure';if(/badge|access|stair|camera|record|audio|beacon|ring|cuff|bracelet|token|corridor|gallery|fibre|fiber|dust|grit/.test(q))return'evidence';return'general'}
+  function answer(k,q){
+    const s=suspects[k], guilty=k===state.culprit, profile=culpritProfiles[state.culprit], i=intent(q); let text='', stress=diffCfg[state.difficulty].stressGain;
+    if(i==='relation') text=s.relation;
+    else if(i==='motive') text=guilty?`“That is a motive on paper, not proof. ${s.motive} I had other ways to deal with it.”`:`“I had reasons to be angry, yes. ${s.motive} But anger is not murder.”`;
+    else if(i==='alibi') text=guilty?`“${profile.lie}”`:`“${s.alibi} I can give you the part I left out if it matters.”`;
+    else if(i==='weapon') text=guilty && state.stress[k]>=45?`“${profile.slip}”`:`“I saw the display earlier. I did not touch the astrolabe.”`;
+    else if(i==='pressure') text=guilty?(state.stress[k]>=60?`“You think I am hiding something because you want the story to fit. Show me what you actually have.”`:`“I am not confessing to a crime because my evening was complicated.”`):`“Fine. ${s.innocentSecret} That is what I was hiding.”`;
+    else if(i==='evidence') text=guilty?`“You are treating a technical trace like an eyewitness. There could be another explanation.”`:`“If that evidence puts me somewhere awkward, ask whether it proves I entered the study. I was hiding something else, not a killing.”`;
+    else text=guilty?`“That is a broad question. Be precise about the timeline or the evidence.”`:`“I can answer that, but the timeline will help you more. Ask where I was around 22:17.”`;
+
+    if(i==='general') stress=Math.ceil(stress/2); state.stress[k]=Math.min(100,state.stress[k]+stress); state.questioned.add(k);
+    if(!guilty && (i==='pressure'||state.stress[k]>=48)) addNote(`INTERVIEW — ${s.name} disclosed: ${s.innocentSecret}`);
+    if(guilty){
+      const clues=culpritProfiles[k].clues;
+      let unlockIndex=-1;
+      if((i==='alibi'||i==='evidence') && state.questions>=2) unlockIndex=0;
+      if((i==='motive'||i==='pressure') && state.questions>=4) unlockIndex=Math.max(unlockIndex,1);
+      if((i==='weapon'||i==='evidence'||i==='pressure') && state.stress[k]>=45) unlockIndex=Math.max(unlockIndex,2);
+      if(unlockIndex>=0){ const ev=clues[unlockIndex]; if(!state.unlocked.has(ev[0])){state.unlocked.add(ev[0]);addNote(`EVIDENCE — ${ev[1]}: ${ev[3]}`);setTimeout(()=>toast(`New evidence: ${ev[1]}`),80);} }
+      if(state.stress[k]>=78 && i==='pressure') text=`“${profile.slip} ...No. Forget that. Next question.”`;
+    } else {
+      // Questioning innocent suspects can surface red-herring context without adding fake forensic proof.
+      if(state.stress[k]>=55 && i==='alibi') text=`“${s.alibi} But yes, there is more: ${s.innocentSecret}”`;
+    }
+    return text;
+  }
+
+  function ask(q){q=q.trim();if(!q||state.ended)return;state.questions++;state.score=Math.max(0,state.score-diffCfg[state.difficulty].scorePenalty);state.chats[activeSuspect].push({from:'user',text:q});const a=answer(activeSuspect,q);state.chats[activeSuspect].push({from:'suspect',text:a});addNote(`Q — ${suspects[activeSuspect].name}: ${q}\nA — ${a}`);renderChat();renderSuspects();updateHud();renderEvidence();}
+
+  function renderEvidence(){
+    const evs=allEvidence();$('#evidenceGrid').innerHTML=evs.filter(e=>!state.evidenceOnly||state.unlocked.has(e.id)).map(e=>{const open=state.unlocked.has(e.id);return`<div class="card evidence ${open?'':'locked'}"><div class="evidence-icon">${open?e.icon:'?'}</div><div><h3>${open?e.name:'Undiscovered evidence'}</h3><p>${open?e.text:'Continue investigating to unlock this item.'}</p><span class="type">${open?e.type:'Locked'}</span></div></div>`}).join('');
+  }
+  function renderAccuse(){
+    $('#accuseSuspect').innerHTML='<option value="">Select a suspect…</option>'+Object.entries(suspects).map(([k,s])=>`<option value="${k}">${s.name} — ${s.role}</option>`).join('');
+    const unlocked=allEvidence().filter(e=>state.unlocked.has(e.id));$('#accuseEvidence').innerHTML=unlocked.map(e=>`<label class="check"><input type="checkbox" value="${e.id}"><span><strong>${e.name}</strong><br>${e.text}</span></label>`).join('')||'<div class="check">No evidence unlocked.</div>';
+  }
+  function addNote(t){const area=$('#notes');const stamp=`\n[${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}] ${t}\n`;area.value+=stamp;state.notes=area.value;}
+  function timeline(){addNote('TIMELINE — 22:09 camera/phone activity begins • 22:12–22:19 murder window • 22:17 smartwatch event • 22:20 main door auto-locks • 22:31 body found. Compare each alibi to this window.');toast('Timeline added');}
+
+  function hint(){if(state.ended)return;state.hints++;state.score=Math.max(0,state.score-120);const p=culpritProfiles[state.culprit];let h='';if(state.hints===1)h=p.hint;else if(state.hints===2)h=`Look for a contradiction involving ${p.clues[0][1].toLowerCase()}. Ask the relevant suspect about their location around 22:12–22:17.`;else h=`The strongest chain is timeline + motive + physical/digital trace. You have discovered ${p.clues.filter(c=>state.unlocked.has(c[0])).length} of 3 culprit-specific proof items.`;$('#hintBox').textContent=h;updateHud();}
+
+  function accuse(){
+    if(state.ended)return;const suspect=$('#accuseSuspect').value;const evidence=$$('#accuseEvidence input:checked').map(x=>x.value);if(!suspect)return toast('Choose a suspect first');if(evidence.length<2)return toast('Select at least two evidence items');state.accusations--;state.score=Math.max(0,state.score-50);const correct=suspect===state.culprit;const culpritIds=new Set(culpritProfiles[state.culprit].clues.map(c=>c[0]));const proof=evidence.filter(x=>culpritIds.has(x)).length;
+    if(correct && (proof>=1||state.difficulty==='rookie')){state.score+=Math.max(0,220-state.questions*2);endGame(true);}else if(state.accusations<=0){endGame(false);}else{const box=$('#verdictBox');box.innerHTML=`<div class="kicker">Charge rejected</div><h3>${correct?'Right suspect. Weak case.':'Wrong suspect.'}</h3><p>${correct?'Your instinct is correct, but the selected evidence does not connect the suspect tightly enough to the murder. Find a culprit-specific contradiction.':'The evidence you selected does not support this suspect as the killer. Rebuild the timeline before your final attempt.'}</p><div class="big">${state.accusations} left</div>`;toast('Accusation not sustained');updateHud();}
+  }
+  function endGame(win){state.ended=true;const killer=suspects[state.culprit],p=culpritProfiles[state.culprit];$('#endKicker').textContent=win?'Case closed':'Case failed';$('#endTitle').textContent=win?`${killer.name}. You got them.`:`${killer.name} walks.`;$('#endText').textContent=win?`Your final score is ${state.score}. You tied the murder window to evidence that broke the alibi.`:`You ran out of accusations. The actual killer was ${killer.name}. Review the evidence chain below.`;$('#solutionText').innerHTML=`<strong>Solution:</strong> ${p.truth}<br><br><strong>Confession:</strong> “${p.confession}”`;$('#endModal').classList.remove('hidden');}
+
+  $$('#nav button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+  $('#difficultyChoices').onclick=e=>{const b=e.target.closest('.diff');if(!b)return;$$('.diff').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.difficulty=b.dataset.diff;};
+  $('#startGame').onclick=start; $('#newCase').onclick=()=>{state.ended=false;$('#endModal').classList.add('hidden');$('#startModal').classList.remove('hidden')}; $('#closeEnd').onclick=()=>$('#endModal').classList.add('hidden');
+  $('#chatForm').onsubmit=e=>{e.preventDefault();const q=$('#questionInput').value;$('#questionInput').value='';ask(q)};$$('.chip').forEach(c=>c.onclick=()=>ask(c.dataset.q));
+  $('#sortEvidence').onclick=()=>{state.evidenceOnly=!state.evidenceOnly;$('#sortEvidence').textContent=state.evidenceOnly?'Show all evidence':'Show unlocked only';renderEvidence()};
+  $('#hintBtn').onclick=hint;$('#submitAccusation').onclick=accuse;$('#addTimeline').onclick=timeline;$('#clearNotes').onclick=()=>{if(confirm('Clear your notebook?')){$('#notes').value='';state.notes=''}};$('#notes').oninput=e=>state.notes=e.target.value;
+  $('#copyNotes').onclick=async()=>{try{await navigator.clipboard.writeText($('#notes').value);toast('Notebook copied')}catch{toast('Copy unavailable in this browser')}};
+})();
+</script>
+</body>
+</html>
